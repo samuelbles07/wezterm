@@ -1,4 +1,4 @@
-local wezterm = require("wezterm")
+local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
 -- -- Import helper function to load submodules
@@ -8,16 +8,16 @@ local config = wezterm.config_builder()
 
 -- config.color_scheme = 'SoftServer'
 -- config.color_scheme = 'Snazzy'
-config.color_scheme = "nordfox"
+config.color_scheme = 'nordfox'
 
 -- Fonts
 -- config.font = wezterm.font("Hack Nerd Font", { weight = "Bold" })
-config.font = wezterm.font("Hack Nerd Font", { weight = "Regular", italic = false })
+config.font = wezterm.font('Hack Nerd Font', { weight = 'Regular', italic = false })
 -- config.font = wezterm.font('Fira Code', { weight = 'Regular', italic = false })
 config.font_size = 13
 
 -- Windows
-config.window_decorations = "RESIZE"
+config.window_decorations = 'RESIZE'
 -- config.enable_tab_bar = false
 config.window_background_opacity = 0.90
 config.macos_window_background_blur = 50
@@ -36,53 +36,53 @@ config.tab_and_split_indices_are_zero_based = false
 -- or `wezterm cli set-tab-title`, but falls back to the
 -- title of the active pane in that tab.
 function tab_title(tab_info)
-	local title = tab_info.tab_title
-	-- if the tab title is explicitly set, take that
-	if title and #title > 0 then
-		return title
-	end
-	-- Otherwise, use the title from the active pane
-	-- in that tab
-	return tab_info.active_pane.title
+  local title = tab_info.tab_title
+  -- if the tab title is explicitly set, take that
+  if title and #title > 0 then
+    return title
+  end
+  -- Otherwise, use the title from the active pane
+  -- in that tab
+  return tab_info.active_pane.title
 end
 
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
-	local title = tab_title(tab)
-	if tab.is_active then
-		return {
-			{ Background = { Color = "#c8c800" } },
-			{ Text = tab.tab_index .. ":" .. title .. " " },
-		}
-	end
-	-- return title
-	return {
-		{ Text = tab.tab_index .. ":" .. title .. " " },
-	}
+wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
+  local title = tab_title(tab)
+  if tab.is_active then
+    return {
+      { Background = { Color = '#c8c800' } },
+      { Text = tab.tab_index .. ':' .. title .. ' ' },
+    }
+  end
+  -- return title
+  return {
+    { Text = tab.tab_index .. ':' .. title .. ' ' },
+  }
 end)
 
 -- keymaps
-config.leader = { key = "q", mods = "ALT", timeout_milliseconds = 2000 }
-config.keys = require("keymaps")
+config.leader = { key = 'q', mods = 'ALT', timeout_milliseconds = 2000 }
+config.keys = require 'keymaps'
 
-wezterm.on("gui-startup", function(cmd)
-	-- Workspaces
-	local create_map = require("workspaces.map")
-	local create_ooa = require("workspaces.ooa")
-	local create_max = require("workspaces.max")
-	create_map()
-	create_ooa()
-	create_max()
-	wezterm.mux.set_active_workspace("map")
+wezterm.on('gui-startup', function(cmd)
+  -- Workspaces
+  local create_map = require 'workspaces.map'
+  local create_ooa = require 'workspaces.ooa'
+  local create_max = require 'workspaces.max'
+  create_map()
+  create_ooa()
+  create_max()
+  wezterm.mux.set_active_workspace 'map'
 end)
 
-wezterm.on("update-status", function(window, pane)
-	-- Add workspace name to the right status bar
-	local workspace = window:active_workspace()
-	window:set_right_status(wezterm.format({
-		{ Background = { Color = "#522d80" } },
-		{ Foreground = { Color = "#f2f2f2" } },
-		{ Text = "  " .. workspace .. " " },
-	}))
+wezterm.on('update-status', function(window, pane)
+  -- Add workspace name to the right status bar
+  local workspace = window:active_workspace()
+  window:set_right_status(wezterm.format {
+    { Background = { Color = '#522d80' } },
+    { Foreground = { Color = '#f2f2f2' } },
+    { Text = '  ' .. workspace .. ' ' },
+  })
 end)
 
 return config
