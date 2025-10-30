@@ -1,20 +1,25 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
+-- -- Import helper function to load submodules
+-- local function load(path)
+-- 	return dofile(wezterm.config_dir .. "/" .. path)
+-- end
+
 -- config.color_scheme = 'SoftServer'
 -- config.color_scheme = 'Snazzy'
 config.color_scheme = "nordfox"
 
 -- Fonts
 -- config.font = wezterm.font("Hack Nerd Font", { weight = "Bold" })
-config.font = wezterm.font("Hack Nerd Font", { weight = 'Regular', italic = false })
--- config.font = wezterm.font('Fira Code', { weight = 'Regular', italic = false }) 
+config.font = wezterm.font("Hack Nerd Font", { weight = "Regular", italic = false })
+-- config.font = wezterm.font('Fira Code', { weight = 'Regular', italic = false })
 config.font_size = 13
 
 -- Windows
 config.window_decorations = "RESIZE"
 -- config.enable_tab_bar = false
-config.window_background_opacity = 0.9
+config.window_background_opacity = 0.90
 config.macos_window_background_blur = 50
 
 -- How many lines of scrollback you want to retain per tab
@@ -57,92 +62,27 @@ end)
 
 -- keymaps
 config.leader = { key = "q", mods = "ALT", timeout_milliseconds = 2000 }
-config.keys = {
-	{
-		mods = "LEADER",
-		key = "n",
-		action = wezterm.action.SpawnTab("CurrentPaneDomain"),
-	},
-	{
-		mods = "LEADER",
-		key = "x",
-		action = wezterm.action.CloseCurrentPane({ confirm = true }),
-	},
-	{
-		mods = "CTRL|ALT",
-		key = "[",
-		action = wezterm.action.ActivateTabRelative(-1),
-	},
-	{
-		mods = "CTRL|ALT",
-		key = "]",
-		action = wezterm.action.ActivateTabRelative(1),
-	},
-	{
-		mods = "LEADER",
-		key = "|",
-		action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
-	},
-	{
-		mods = "LEADER",
-		key = "-",
-		action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
-	},
-	{
-		mods = "LEADER",
-		key = "h",
-		action = wezterm.action.ActivatePaneDirection("Left"),
-	},
-	{
-		mods = "LEADER",
-		key = "j",
-		action = wezterm.action.ActivatePaneDirection("Down"),
-	},
-	{
-		mods = "LEADER",
-		key = "k",
-		action = wezterm.action.ActivatePaneDirection("Up"),
-	},
-	{
-		mods = "LEADER",
-		key = "l",
-		action = wezterm.action.ActivatePaneDirection("Right"),
-	},
-	{
-		mods = "LEADER",
-		key = "LeftArrow",
-		action = wezterm.action.AdjustPaneSize({ "Left", 5 }),
-	},
-	{
-		mods = "LEADER",
-		key = "RightArrow",
-		action = wezterm.action.AdjustPaneSize({ "Right", 5 }),
-	},
-	{
-		mods = "LEADER",
-		key = "DownArrow",
-		action = wezterm.action.AdjustPaneSize({ "Down", 5 }),
-	},
-	{
-		mods = "LEADER",
-		key = "UpArrow",
-		action = wezterm.action.AdjustPaneSize({ "Up", 5 }),
-	},
-	{
-		mods = "LEADER",
-		key = "Enter",
-		action = wezterm.action.TogglePaneZoomState,
-	},
-}
+config.keys = require("keymaps")
 
--- Set switching tab using tab number
-for i = 1, 8 do
-	-- CTRL+ALT + number to activate that tab
-	table.insert(config.keys, {
-		key = tostring(i),
-		mods = "CTRL|ALT",
-		action = wezterm.action.ActivateTab(i - 1),
-	})
-end
+wezterm.on("gui-startup", function(cmd)
+	-- Workspaces
+	local create_map = require("workspaces.map")
+	local create_ooa = require("workspaces.ooa")
+	local create_max = require("workspaces.max")
+	create_map()
+	create_ooa()
+	create_max()
+	wezterm.mux.set_active_workspace("map")
+end)
+
+wezterm.on("update-status", function(window, pane)
+	-- Add workspace name to the right status bar
+	local workspace = window:active_workspace()
+	window:set_right_status(wezterm.format({
+		{ Background = { Color = "#522d80" } },
+		{ Foreground = { Color = "#f2f2f2" } },
+		{ Text = "  " .. workspace .. " " },
+	}))
+end)
 
 return config
