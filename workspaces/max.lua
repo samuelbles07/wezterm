@@ -9,7 +9,6 @@ return function()
     workspace = ws,
     cwd = home .. '/Work/airgradient/dev/openair-max',
   }
-  window:gui_window():maximize()
   tab:set_title 'dev'
   pane:send_text "bash -lc 'nvim'\r"
 

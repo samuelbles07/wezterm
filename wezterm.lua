@@ -67,9 +67,17 @@ config.leader = { key = "q", mods = "ALT", timeout_milliseconds = 2000 }
 config.keys = require("keymaps")
 
 wezterm.on("gui-startup", function(cmd)
-	require("workspaces.map")(cmd)
+	local _, _, window = wezterm.mux.spawn_window(cmd or {})
+	local gui_window = window:gui_window()
+	if gui_window then
+		gui_window:maximize()
+	end
+
+	require("workspaces.map")()
 	require("workspaces.ooa")()
 	require("workspaces.max")()
+	require("workspaces.core")()
+	require("workspaces.expr")()
 	wezterm.mux.set_active_workspace("map")
 end)
 
