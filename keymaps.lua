@@ -78,35 +78,35 @@ local keys = {
 		action = act.TogglePaneZoomState,
 	},
 	{
-		key = "1",
+		key = "y",
 		mods = "LEADER",
 		action = act.SwitchToWorkspace({
 			name = "map",
 		}),
 	},
 	{
-		key = "2",
+		key = "i",
 		mods = "LEADER",
 		action = act.SwitchToWorkspace({
 			name = "ooa",
 		}),
 	},
 	{
-		key = "3",
+		key = "o",
 		mods = "LEADER",
 		action = act.SwitchToWorkspace({
 			name = "max",
 		}),
 	},
 	{
-		key = "4",
+		key = "u",
 		mods = "LEADER",
 		action = act.SwitchToWorkspace({
 			name = "core",
 		}),
 	},
 	{
-		key = "5",
+		key = "p",
 		mods = "LEADER",
 		action = act.SwitchToWorkspace({
 			name = "expr",
