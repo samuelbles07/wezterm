@@ -5,12 +5,17 @@ return function()
   local home = os.getenv 'HOME'
   local ws = 'ooa'
 
-  local tab, pane, window = mux.spawn_window {
+  local tab, pane = mux.spawn_window {
     workspace = ws,
     cwd = home .. '/Work/airgradient/dev/arduino-dev',
   }
   tab:set_title 'dev'
   pane:send_text "bash -lc 'nvim'\r"
+
+  local tab2 = tab:window():spawn_tab {
+    cwd = home .. '/Work/airgradient/dev/arduino-dev',
+  }
+  tab2:set_title 'agent'
 
   local term_tab = tab:window():spawn_tab {
     cwd = home .. '/Work/airgradient/dev/arduino-dev',

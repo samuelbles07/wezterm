@@ -78,7 +78,7 @@ wezterm.on("gui-startup", function(cmd)
 	require("workspaces.max")()
 	require("workspaces.core")()
 	require("workspaces.expr")()
-	wezterm.mux.set_active_workspace("map")
+	wezterm.mux.set_active_workspace("core")
 end)
 
 wezterm.on("update-status", function(window, pane)
