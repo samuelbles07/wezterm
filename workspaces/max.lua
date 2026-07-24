@@ -12,14 +12,14 @@ return function()
 	tab:set_title("dev")
 	pane:send_text("bash -lc 'nvim'\r")
 
-	local tab2 = tab:window():spawn_tab({
-		cwd = home .. "/Work/airgradient/dev/openair-max",
-	})
-	tab2:set_title("agent")
-
 	local tab3, pane3 = tab:window():spawn_tab({
 		cwd = home .. "/Work/airgradient/dev/openair-max",
 	})
 	pane3:send_text("get_idf\r")
 	tab3:set_title("term")
+
+	local tab2 = tab:window():spawn_tab({
+		cwd = home .. "/Work/airgradient/dev/openair-max",
+	})
+	tab2:set_title("agent")
 end
